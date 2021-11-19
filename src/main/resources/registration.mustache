@@ -1,0 +1,31 @@
+<html>
+<body>
+<h1>
+    Registration
+</h1>
+<form action="/registration" method="post">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username"><br>
+    {{#usernameMessage}}
+        {{.}}<br>
+    {{/usernameMessage}}
+    <label for="password">Password</label>
+    <input type="text" name="password" id="password"><br>
+    {{#passwordMessage}}
+        {{.}}<br>
+    {{/passwordMessage}}
+    <label for="matchingPassword">Confirm password</label>
+    <input type="text" name="matchingPassword" id="matchingPassword"><br>
+    {{#confirmPasswordMessage}}
+        {{.}}<br>
+    {{/confirmPasswordMessage}}
+    <label for="email">Email</label>
+    <input type="text" name="email" id="email"><br>
+    {{#emailMessage}}
+        {{.}}<br>
+    {{/emailMessage}}
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    <input type="submit" value="Sign in!">
+</form>
+</body>
+</html>
