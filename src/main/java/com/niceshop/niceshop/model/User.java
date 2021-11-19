@@ -1,11 +1,15 @@
 package com.niceshop.niceshop.model;
 
+import com.niceshop.niceshop.validators.ValidEmail;
 import com.sun.istack.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,16 +33,20 @@ public class User {
     @NotBlank
     @NotNull
     @Column(
-            nullable = false
+            unique = false,
+            nullable = false,
+            length = 255
     )
     String password;
 
     @Column(
+            nullable = true,
             length = 30
     )
     String firstname;
 
     @Column(
+            nullable = true,
             length = 30
     )
     String lastname;
