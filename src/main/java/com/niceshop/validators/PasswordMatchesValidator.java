@@ -1,7 +1,6 @@
-package com.niceshop.niceshop.validators;
+package com.niceshop.validators;
 
-import com.niceshop.niceshop.DTO.UserDTO;
-import com.niceshop.niceshop.model.User;
+import com.niceshop.DTO.UserDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

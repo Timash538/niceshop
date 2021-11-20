@@ -1,4 +1,4 @@
-package com.niceshop.niceshop.exceptions;
+package com.niceshop.exceptions;
 
 public class EmailAlreadyExists extends Exception{
     public  EmailAlreadyExists(String errorMessage) {super(errorMessage);}

@@ -1,11 +1,10 @@
-package com.niceshop.niceshop.DTO;
+package com.niceshop.DTO;
 
-import com.niceshop.niceshop.validators.PasswordMatches;
-import com.niceshop.niceshop.validators.ValidEmail;
+import com.niceshop.validators.PasswordMatches;
+import com.niceshop.validators.ValidEmail;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,10 +23,13 @@ public class UserDTO {
     @NotNull
     @NotEmpty
     private String password;
+
+    @NotEmpty
     private String matchingPassword;
 
-    @ValidEmail
+
     @NotNull
     @NotEmpty
+    @ValidEmail
     private String email;
 }

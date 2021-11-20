@@ -1,4 +1,4 @@
-package com.niceshop.niceshop.validators;
+package com.niceshop.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

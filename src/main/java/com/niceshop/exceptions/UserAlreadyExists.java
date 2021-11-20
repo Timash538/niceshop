@@ -1,4 +1,4 @@
-package com.niceshop.niceshop.exceptions;
+package com.niceshop.exceptions;
 
 public class UserAlreadyExists extends Exception {
     public UserAlreadyExists(String errorMessage) {

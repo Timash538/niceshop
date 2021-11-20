@@ -1,6 +1,5 @@
-package com.niceshop.niceshop.validators;
+package com.niceshop.validators;
 
-import javax.persistence.Table;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;

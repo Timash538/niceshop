@@ -1,29 +1,40 @@
 <html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
 <body>
 <h1>
     Registration
 </h1>
 <form action="/registration" method="post">
     <label for="username">Username</label>
-    <input type="text" name="username" id="username"><br>
+    <input type="text" name="username" id="username" value="{{#username}}{{.}}{{/username}}"><br>
+    <ul class="text-danger">
     {{#usernameMessage}}
-        {{.}}<br>
+        <li>{{.}}</li><br>
     {{/usernameMessage}}
+    </ul>
     <label for="password">Password</label>
     <input type="text" name="password" id="password"><br>
+    <ul class="text-danger">
     {{#passwordMessage}}
-        {{.}}<br>
+        <li>{{.}}</li><br>
     {{/passwordMessage}}
+    </ul>
     <label for="matchingPassword">Confirm password</label>
     <input type="text" name="matchingPassword" id="matchingPassword"><br>
-    {{#confirmPasswordMessage}}
-        {{.}}<br>
-    {{/confirmPasswordMessage}}
+    <ul class="text-danger">
+    {{#nullMessage}}
+        <li>{{.}}</li><br>
+    {{/nullMessage}}
+    </ul>
     <label for="email">Email</label>
-    <input type="text" name="email" id="email"><br>
+    <input type="text" name="email" id="email" value="{{#email}}{{.}}{{/email}}"><br>
+    <ul class="text-danger">
     {{#emailMessage}}
-        {{.}}<br>
+        <li>{{.}}</li><br>
     {{/emailMessage}}
+    </ul>
     <input type="hidden" name="_csrf" value="{{_csrf.token}}">
     <input type="submit" value="Sign in!">
 </form>
