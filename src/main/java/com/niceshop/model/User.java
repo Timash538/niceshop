@@ -1,5 +1,6 @@
 package com.niceshop.model;
 
+import com.niceshop.validators.ValidEmail;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
 
@@ -22,7 +24,8 @@ public class User implements UserDetails {
     Long id;
 
 
-    @NotBlank
+    //@Size(min = 6, max = 15, message = "Length of username must be between 6 and 15 characters")
+    @NotBlank(message = "Username cannot be empty")
     @Column(
             unique = true,
             nullable = false,
@@ -30,7 +33,7 @@ public class User implements UserDetails {
     )
     String username;
 
-    @NotBlank
+    @NotBlank(message = "Password cannot be empty")
     @NotNull
     @Column(
             unique = false,
@@ -38,6 +41,10 @@ public class User implements UserDetails {
             length = 255
     )
     String password;
+
+    @Transient
+    //@Size(min = 8, max = 30, message = "Length of password confirmation must be between 8 and 30 characters")
+    String confirmationPassword;
 
     @Column(
             nullable = true,
@@ -56,6 +63,8 @@ public class User implements UserDetails {
             nullable = false,
             length = 50
     )
+    @ValidEmail
+    //@NotBlank(message = "Email cannot be empty")
     String email;
 
     boolean active;
@@ -90,4 +99,13 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isActive();
     }
+
+    public boolean hasRole(Role role) {
+        if (roles.contains(role))
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isAdmin() {return hasRole(Role.ADMIN);}
 }

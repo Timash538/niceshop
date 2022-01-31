@@ -1,87 +1,73 @@
 package com.niceshop.controllers;
 
-import com.niceshop.DTO.UserDTO;
-import com.niceshop.service.UserService;
+import com.niceshop.model.Role;
+import com.niceshop.model.User;
+import com.niceshop.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.*;
-import java.util.*;
+import java.util.Collection;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserRepo userRepo;
 
+    @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/")
-    String main() {
-        return "main";
+    public String userList(@AuthenticationPrincipal User user,
+                           Model model) {
+        model.addAttribute("userList",userRepo.findAll());
+        return "users";
     }
 
-    @GetMapping("/login")
-    String login(Model model) {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    RedirectView loggingIn(@RequestParam String username,
-                           @RequestParam String password) {
-
-        return new RedirectView("/");
-    }
-
-    @GetMapping("/registration")
-    String registration(Model model) {
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    ModelAndView registrationProcess(@ModelAttribute @Valid UserDTO user,
-                                     RedirectAttributes attributes) {
-
-        //Find all violations with hibernate validation features
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
-
-        Map<String, List<String>> messages = userService.isUserInDB(user);
-        //If hibernate validation found violations or user is in DB
-        if (!violations.isEmpty() || !messages.isEmpty()) {
-
-            // For each violation add flash attribute
-            for (ConstraintViolation violation : violations) {
-                String messageName = violation.getPropertyPath().iterator().next().getName() + "Message";
-                if (messages.containsKey(messageName)) {
-                    messages.get(messageName).add(violation.getMessage());
-                }
-                else {
-                    List<String> stringList = new ArrayList<>();
-                    stringList.add(violation.getMessage());
-                    messages.put(messageName, stringList);
-                }
-            }
-            for (String message : messages.keySet()) {
-                System.out.println(message + " : " + messages.get(message));
-                attributes.addFlashAttribute(message, messages.get(message));
-            }
-
-            attributes.addFlashAttribute("username", user.getUsername());
-            attributes.addFlashAttribute("email",user.getEmail());
-            return new ModelAndView("redirect:/registration");
+    @GetMapping("/{id}")
+    public String getUser(@PathVariable Long id,
+                          @ModelAttribute("user") User user,
+                          @AuthenticationPrincipal User currentUser,
+                          Model model) {
+        if (!userRepo.findById(id).isPresent() || !(currentUser.isAdmin() || currentUser.getId().equals(id))) {
+            return "redirect:/";
         }
-
-        userService.registerNewUser(user);
-        return new ModelAndView("main");
+        user = userRepo.findById(id).get();
+        model.addAttribute("user", user);
+        return "edit";
     }
+
+    @PostMapping("/edit/{id}")
+    public String updateUser(@PathVariable("id") Long id,
+                             @ModelAttribute("user") User editedUser,
+                             @AuthenticationPrincipal User currentUser) {
+        User user;
+        if (userRepo.findById(id).isPresent()) {
+            user = userRepo.findById(id).get();
+        }
+        else {
+            return "redirect:/";
+        }
+        if ((currentUser.hasRole(Role.ADMIN)) || currentUser.equals(user)) {
+            user.setUsername(editedUser.getUsername());
+            user.setEmail(editedUser.getEmail());
+            user.setFirstname(editedUser.getFirstname());
+            user.setLastname(editedUser.getLastname());
+            if (currentUser.equals(user)) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User userDetails = (User) authentication.getPrincipal();
+                userDetails.setUsername(user.getUsername());
+            }
+            userRepo.save(user);
+        }
+        return "redirect:/user";
+    }
+
 }

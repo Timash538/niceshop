@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"/>
+<body>
+<div th:replace="fragments/general.html :: nav"/>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Firstname</th>
+        <th scope="col">Lastname</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${userList}">
+        <th th:text="${user.id}" scope="row"/>
+        <td scope="row"><a th:text="${user.username}" th:href="|/user/${user.id}|"/></td>
+        <td th:text="${user.email}" scope="row"/>
+        <td th:text="${user.firstname}" scope="row"/>
+        <td th:text="${user.lastname}" scope="row"/>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

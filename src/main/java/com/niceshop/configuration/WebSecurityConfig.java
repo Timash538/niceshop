@@ -24,12 +24,22 @@ import javax.swing.*;
 import javax.xml.crypto.Data;
 
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Autowired
-    DataSource dataSource;
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,17 +50,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .failureUrl("/login-error")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll();
     }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
-    @Autowired
-    UserService userService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
@@ -58,10 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder);
     }
 
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
 }
+

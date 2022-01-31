@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+</head>
+<body>
+<div th:replace="fragments/general.html :: nav"/>
+<h1 th:text="${user.username}"/>
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <input class="btn btn-primary" type="submit" value="Sign out">
+</form>
+</body>
+</html>

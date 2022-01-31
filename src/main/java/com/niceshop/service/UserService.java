@@ -1,6 +1,5 @@
 package com.niceshop.service;
 
-import com.niceshop.DTO.UserDTO;
 import com.niceshop.model.Role;
 import com.niceshop.model.User;
 import com.niceshop.repos.UserRepo;
@@ -30,29 +29,26 @@ public class UserService implements UserDetailsService {
         return userRepo.findById(id);
     }
 
+    public User findByUsername(String username) {return userRepo.findByUsername(username);}
+
+    public boolean isUserInDB(User user) {
+        if (userRepo.findByUsername(user.getUsername()) != null || userRepo.findByEmail(user.getEmail()) != null) {return true;}
+        else {return false;}
+    }
     //Checks if user is in DataBase and returns map with violoations
-    public Map<String,List<String>> isUserInDB(UserDTO userDTO) {
-        Map<String,List<String>> messages = new HashMap<>();
-        if (userRepo.findByUsername(userDTO.getUsername()) != null) {
-            //throw new UserAlreadyExists("User with that username already exists!");
-            List<String> list = new ArrayList<>();
-            list.add("User with that username exists!");
-            messages.put("usernameMessage", list);
+    public Map<String,String> getUserRepoErrorsMap(User user) {
+        Map<String,String> errorMap = new HashMap<>();
+        if (userRepo.findByUsername(user.getUsername()) != null) {
+            errorMap.put("usernameMessage", "User with that username already exists!");
         }
-        if (userRepo.findByEmail(userDTO.getEmail()).isPresent()) {
-            //throw new EmailAlreadyExists("User with that email already exists!");
-            List<String> list = new ArrayList<>();
-            list.add("User with that email exists!");
-            messages.put("emailMessage", list);
+        if (userRepo.findByEmail(user.getEmail()) != null) {
+            errorMap.put("emailMessage", "User with that username already exists!");
         }
-        return messages;
+        return errorMap;
     }
 
-    public void registerNewUser(UserDTO userDTO) {
-            User user = new User();
-            user.setUsername(userDTO.getUsername());
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setEmail(userDTO.getEmail());
+    public void registerNewUser(User user) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(Collections.singleton(Role.USER));
             user.setActive(true);
             userRepo.save(user);

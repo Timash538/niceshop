@@ -2,7 +2,6 @@ package com.niceshop.repos;
 
 import com.niceshop.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +12,7 @@ public interface UserRepo extends JpaRepository<User,Long> {
 
     List<User> findAll();
     Optional<User> findById(Long id);
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
     User findByUsername(String username);
+
 }
