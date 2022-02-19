@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
             errorMap.put("usernameMessage", "User with that username already exists!");
         }
         if (userRepo.findByEmail(user.getEmail()) != null) {
-            errorMap.put("emailMessage", "User with that username already exists!");
+            errorMap.put("emailMessage", "User with that email already exists!");
         }
         return errorMap;
     }

@@ -55,19 +55,19 @@ public class UserController {
         else {
             return "redirect:/";
         }
-        if ((currentUser.hasRole(Role.ADMIN)) || currentUser.equals(user)) {
+        if ((currentUser.hasRole(Role.ADMIN)) || currentUser.getId().equals(user.getId())) {
             user.setUsername(editedUser.getUsername());
             user.setEmail(editedUser.getEmail());
             user.setFirstname(editedUser.getFirstname());
             user.setLastname(editedUser.getLastname());
-            if (currentUser.equals(user)) {
+            if (currentUser.getId().equals(user.getId())) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User userDetails = (User) authentication.getPrincipal();
                 userDetails.setUsername(user.getUsername());
             }
             userRepo.save(user);
         }
-        return "redirect:/user";
+        return "redirect:/user/" + user.getId();
     }
 
 }

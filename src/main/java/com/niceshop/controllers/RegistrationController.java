@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -40,8 +43,6 @@ public class RegistrationController {
         if (bindingResult.hasErrors() || !isPasswordConfirmationCorrect || userService.isUserInDB(user)) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
-            errorsMap.keySet().iterator().forEachRemaining(System.out::println);
-
             errorsMap = userService.getUserRepoErrorsMap(user);
             model.mergeAttributes(errorsMap);
 

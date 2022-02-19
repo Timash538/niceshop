@@ -23,6 +23,7 @@
                 </div>
                 <div th:if="${loginError}" class=" alert alert-danger">Username or password incorrect!</div>
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}" >
+                <div>Or, if you don't have an account <a href="/registration">Sign Up</a></div>
                 <div class="text-center">
                     <input class="btn btn-primary" type="submit" value="Sign in">
                 </div>
