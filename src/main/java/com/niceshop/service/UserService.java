@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         if (userRepo.findByUsername(user.getUsername()) != null || userRepo.findByEmail(user.getEmail()) != null) {return true;}
         else {return false;}
     }
-    //Checks if user is in DataBase and returns map with violoations
+    //Checks if user is in DataBase and returns map with violations
     public Map<String,String> getUserRepoErrorsMap(User user) {
         Map<String,String> errorMap = new HashMap<>();
         if (userRepo.findByUsername(user.getUsername()) != null) {

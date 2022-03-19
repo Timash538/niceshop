@@ -21,6 +21,12 @@
             <li class="nav-item active">
                 <a class="nav-link" th:href="|/user/${auth.getId()}|">My profile</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="|/product|">My products</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="|/product/new_product|">New product</a>
+            </li>
             <li class="nav-item active" th:if="${auth.isAdmin()}">
                 <a class="nav-link" href="/user">User List</a>
             </li>
@@ -37,10 +43,20 @@
 <!--                </div>-->
 <!--            </li>-->
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+<!--        <form class="form-inline my-2 my-lg-0">-->
+<!--            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+<!--            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+<!--        </form>-->
+        <th:block th:if="${#authentication.getPrincipal()}!='anonymousUser'" th:with="auth=${#authentication.getPrincipal()}">
+
+        <div class="form-inline my-2 my-lg-0">
+            <div class="mr-sm-2" th:text="${user.username}"/>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <input class="btn btn-primary my-2 my-sm-0" type="submit" value="Sign out">
+            </form>
+        </div>
+        </th:block>
     </div>
 </nav>
 <body>

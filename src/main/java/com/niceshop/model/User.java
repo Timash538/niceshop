@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,12 +22,14 @@ import java.util.Set;
 @Table(name = "usr")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
+    @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_id_seq", initialValue = 2, allocationSize = 1)
     Long id;
 
 
     //@Size(min = 6, max = 15, message = "Length of username must be between 6 and 15 characters")
     @NotBlank(message = "Username cannot be empty")
+    @NotNull
     @Column(
             unique = true,
             nullable = false,
@@ -74,6 +78,11 @@ public class User implements UserDetails {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @Enumerated(EnumType.STRING)
     Set<Role> roles;
+
+    String picture;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    List<Product> products;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

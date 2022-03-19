@@ -5,10 +5,27 @@
 </head>
 <body>
 <div th:replace="fragments/general.html :: nav"/>
-<h1 th:text="${user.username}"/>
-<form action="/logout" method="post">
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-    <input class="btn btn-primary" type="submit" value="Sign out">
-</form>
+<!--<h1 th:text="${user.username}"/>-->
+<!--<form action="/logout" method="post">-->
+<!--    <input type="hidden" name="_csrf" th:value="${_csrf.token}">-->
+<!--    <input class="btn btn-primary" type="submit" value="Sign out">-->
+<!--</form>-->
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Product name</th>
+        <th scope="col">Product description</th>
+        <th scope="col">Product image</th>
+        <th scope="col">Seller</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <th th:text="${product.name}" scope="row"/>
+        <th th:text="${product.description}" scope="row"/>
+        <th th:if="${!product.getPictures().isEmpty()}" scope="row"><img style="width:200px;height:300px;" class="image" th:src="@{${'static/users/' + product.user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}"></th>
+        <th th:text="${product.user.username}" scope="row"/>
+    </tr>
+    </tbody>
 </body>
 </html>
