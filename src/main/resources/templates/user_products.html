@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     <tr th:each="product : ${products}">
-        <th th:text="${product.name}" scope="row"/>
+        <th scope="row"> <a th:href="@{${'product/edit/' + product.id}}" th:text="${product.name}" ></a>  </th>
         <th th:text="${product.description}" scope="row"/>
         <th th:if="${!product.getPictures().isEmpty()}" scope="row"><img style="width:200px;height:300px;" class="image" th:src="@{${'static/users/' + user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}"></th>
     </tr>

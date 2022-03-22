@@ -40,8 +40,9 @@ public class Product {
     @JoinColumn(name="user_id")
     private User user;
 
-    public void addPicture(String name) {
+    public String addPicture(String name) {
         pictures.add(name);
+        return name;
     }
 
 }

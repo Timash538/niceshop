@@ -18,6 +18,15 @@ import java.nio.file.Paths;
 @EnableWebMvc
 public class MVCConfig implements WebMvcConfigurer {
 
+    @Bean
+    public String rootDirectory() {
+        Path path = Paths.get("");
+        return path.toFile().getAbsolutePath();
+    }
+
+    @Value("#{rootDirectory}")
+    String root;
+
     @Value("${file.images}")
     String imageStorage;
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -25,16 +34,17 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/image/**").addResourceLocations("classpath:/static/images/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/templates/");
+        registry.addResourceHandler("/static/users/**").addResourceLocations("file:" + imageStorage);
         exposeDirectory("static/users", registry);
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
         Path uploadDir = Paths.get(dirName);
         String uploadPath = uploadDir.toFile().getAbsolutePath();
-
+        System.out.println(root);
         if (dirName.startsWith("../")) dirName = dirName.replace("../","");
 
-        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:" + imageStorage);
+        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:" + root + "/sss/");
     }
 
     @Bean
@@ -44,6 +54,8 @@ public class MVCConfig implements WebMvcConfigurer {
         bean.setSuffix(".html");
         return bean;
     }
+
+
 
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");

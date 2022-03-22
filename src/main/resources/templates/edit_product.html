@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/general.html :: nav"/>
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <h1 class="text-center">
+                Edit product
+            </h1>
+            <form action="/product" method="post"
+                  enctype="multipart/form-data">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="name">Name</label>
+                    <input class="form-control" th:classappend="${nameMessage} ? is-invalid : ''" type="text" name="name" id="name" th:value="${product.name}">
+                    <div th:if="${nameMessage}" class="invalid-feedback" th:text="${nameMessage}"/>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="description">Description</label>
+                    <input class="form-control" th:classappend="${descriptionMessage} ? is-invalid : ''" type="text" name="description" id="description" th:value="${product.description}">
+                    <div th:if="${descriptionMessage}" class="invalid-feedback" th:text="${descriptionMessage}"/>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label>Photos: </label>
+                    <input type="file" name="image" accept="image/png, image/jpeg" />
+                </div>
+                <div th:if="${!product.getPictures().isEmpty()}" scope="row"><img style="width:200px;height:300px;" class="image" th:src="@{${'~/static/users/' + product.user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}"></div>
+                <input type="hidden" name="_csrf"
+                       th:value="${_csrf.token}" />
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" value="Sign Up">
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
