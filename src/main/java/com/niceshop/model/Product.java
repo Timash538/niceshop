@@ -31,10 +31,11 @@ public class Product {
     )
     private String description;
 
-    @ElementCollection
+    @ElementCollection()
     @CollectionTable(name = "listOfPictures")
     @Column(name="picture")
     private List<String> pictures = new ArrayList<>();
+
 
     @ManyToOne()
     @JoinColumn(name="user_id")

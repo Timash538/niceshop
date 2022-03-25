@@ -57,6 +57,10 @@
             </form>
         </div>
         </th:block>
+        <th:block th:if="${#authentication.getPrincipal()}=='anonymousUser'">
+
+            <a href="/login">Login</a>
+        </th:block>
     </div>
 </nav>
 <body>

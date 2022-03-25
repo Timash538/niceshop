@@ -25,11 +25,14 @@ public class ProductService {
 
     public List<Product> findByUser(User user) {return productRepo.findByUser(user);}
 
-    public void registerNewProduct(Product product) {
+    public void save(Product product) {
         productRepo.save(product);
     }
 
     public Long getNextSeriesId() {
-        return productRepo.getNextSeriesId()+1;
+        if (productRepo.findById(1L).isPresent()) {
+            return productRepo.getNextSeriesId()+1;
+        }
+        return 1L;
     }
 }

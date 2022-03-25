@@ -2,6 +2,22 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!--    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"/>-->
+    <script>
+        var el = document.getElementById("add-product");
+        function kik() {
+            var $fileUpload = $("input[type='file']");
+            if ($fileUpload.get(0).files.length>4){
+            alert("You can only upload a maximum of 4 files");
+        }}
+        el.addEventListener("click",kik);
+        function validateOnSubmit() {
+            var $fileUpload = $("input[type='file']");
+            if ($fileUpload.get(0).files.length>4) {
+                return false;}
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div th:replace="fragments/general.html :: nav"/>
@@ -13,7 +29,8 @@
             Register new product
         </h1>
         <form action="/product" method="post"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data"
+                onsubmit="return validateOnSubmit()">
             <div class="form-group mx-sm-3 mb-2">
                 <label for="name">Name</label>
                 <input class="form-control" th:classappend="${nameMessage} ? is-invalid : ''" type="text" name="name" id="name" th:value="${product.name}">
@@ -21,21 +38,19 @@
             </div>
             <div class="form-group mx-sm-3 mb-2">
                 <label for="description">Description</label>
-                <input class="form-control" th:classappend="${descriptionMessage} ? is-invalid : ''" type="text" name="description" id="description">
+                <input class="form-control" th:classappend="${descriptionMessage} ? is-invalid : ''" type="text" name="description" id="description" th:value="${product.description}">
                 <div th:if="${descriptionMessage}" class="invalid-feedback" th:text="${descriptionMessage}"/>
             </div>
             <div class="form-group mx-sm-3 mb-2">
                 <label>Photos: </label>
-                <input type="file" name="image" accept="image/png, image/jpeg" />
-            </div>
-            <div class="form-group mx-sm-3 mb-2">
-                <label>Photos: </label>
-                <input type="file" name="image" accept="image/png, image/jpeg" />
+                <input type="file" th:classappend="${filesMessage} ? is-invalid : ''" name="image" accept="image/png, image/jpeg" multiple/>
+                <div th:if="${filesMessage}" th:text="${filesMessage}"/>
+
             </div>
             <input type="hidden" name="_csrf"
                    th:value="${_csrf.token}" />
             <div class="text-center">
-                <input class="btn btn-primary" type="submit" value="Sign Up">
+                <input id="add-product" class="btn btn-primary" type="submit" value="Add product">
             </div>
         </form>
     </div>

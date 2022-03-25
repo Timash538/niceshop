@@ -27,24 +27,12 @@ public class MVCConfig implements WebMvcConfigurer {
     @Value("#{rootDirectory}")
     String root;
 
-    @Value("${file.images}")
-    String imageStorage;
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/image/**").addResourceLocations("classpath:/static/images/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/templates/");
-        registry.addResourceHandler("/static/users/**").addResourceLocations("file:" + imageStorage);
-        exposeDirectory("static/users", registry);
-    }
-
-    private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
-        Path uploadDir = Paths.get(dirName);
-        String uploadPath = uploadDir.toFile().getAbsolutePath();
-        System.out.println(root);
-        if (dirName.startsWith("../")) dirName = dirName.replace("../","");
-
-        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:" + root + "/sss/");
+        registry.addResourceHandler("/static/users/**").addResourceLocations("file:" + root + "/imageRepo/");
     }
 
     @Bean
