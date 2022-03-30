@@ -3,23 +3,18 @@
 <head th:replace="fragments/general.html :: head"/>
 <body>
 <div th:replace="fragments/general.html :: nav"/>
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Product name</th>
-        <th scope="col">Product description</th>
-        <th scope="col">Product image</th>
-        <th scope="col">Firstname</th>
-        <th scope="col">Lastname</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="product : ${products}">
-        <th scope="row"> <a th:href="@{${'product/edit/' + product.id}}" th:text="${product.name}" ></a>  </th>
-        <th th:text="${product.description}" scope="row"/>
-        <th th:if="${!product.getPictures().isEmpty()}" scope="row"><img style="width:200px;height:300px;" class="image" th:src="@{${'static/users/' + user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}"></th>
-    </tr>
-    </tbody>
-</table>
+<div class=" card-group m-2">
+    <div th:each="product : ${products}">
+        <div class="card m-2 h-100" style="width: 18rem;">
+            <img th:if="${!product.getPictures().isEmpty()}" class="card-img-top" th:src="@{${'static/users/' + product.user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}">
+            <div class="card-body">
+                <h5><a th:href="@{${'product/edit/' + product.id}}" th:text="${product.name}" class="card-title"/></h5>
+                <p th:text="${product.description}" class="card-text"/>
+                <p th:text="${'By ' + product.user.username}"class="card-text"/>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+

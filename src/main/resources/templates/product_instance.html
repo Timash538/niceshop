@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"/>
+<body>
+<div th:replace="fragments/general.html :: nav"/>
+<div class="container">
+    <div class="row">
+        <img class="col-4" th:src="@{${'~/static/users/' + product.user.id + '/products/' + product.id + '/' + product.getPictures().get(0)}}"/>
+        <div class="col-8">col-8</div>
+    </div>
+</div>
+</body>
+</html>

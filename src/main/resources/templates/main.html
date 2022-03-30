@@ -9,7 +9,7 @@
         <div class="card m-2 h-100" style="width: 18rem;">
             <img th:if="${!product.getPictures().isEmpty()}" class="card-img-top" th:src="@{${'static/users/' + product.user.id + '/products/' + product.id + '/' +product.getPictures()[0]}}">
             <div class="card-body">
-                <h5 th:text="${product.name}" class="card-title"/>
+                <h5> <a th:href="@{${'product/' + product.id}}" th:text="${product.name}" class="card-title"/></h5>
                 <p th:text="${product.description}" class="card-text"/>
                 <p th:text="${'By ' + product.user.username}"class="card-text"/>
 <!--                <a href="#" class="btn btn-primary">Go somewhere</a>-->

@@ -41,12 +41,22 @@ public class ProductController {
         return "user_products";
     }
 
+    @GetMapping("/{id}")
+    public String productInstance(@AuthenticationPrincipal User user,
+                                  @PathVariable("id") Product product,
+                                  Model model) {
+        model.addAttribute("user",user);
+        model.addAttribute("product",product);
+        return "product_instance";
+    }
+
     @GetMapping("/edit/{id}")
     public String editProductForm(@AuthenticationPrincipal User user,
                               @PathVariable("id") Product product,
                               Model model) {
-        if (!(user.isAdmin() || user == product.getUser()))
-        return "redirect:/";
+        if (!(user.isAdmin() || user.getId().equals(product.getUser().getId()))) {
+            return "redirect:/";
+        }
         model.addAttribute("product", product);
         model.addAttribute("user", user);
         return "edit_product";
@@ -103,11 +113,12 @@ public class ProductController {
                               @AuthenticationPrincipal User currentUser,
                               Model model) {
         model.addAttribute("user",currentUser);
-        if (!(currentUser.hasRole(Role.ADMIN) || product.getUser() == currentUser)) {
+        Product currentProduct = productService.findById(id).get();
+        if (!(currentUser.hasRole(Role.ADMIN) || currentProduct.getUser().getId().equals(currentUser.getId()))) {
             model.addAttribute("userMessage","User is not owner of product or administrator");
             return "edit_product";
         }
-        Product currentProduct = productService.findById(id).get();
+
         product.setUser(currentProduct.getUser());
         product.setPictures(currentProduct.getPictures());
         productService.save(product);
